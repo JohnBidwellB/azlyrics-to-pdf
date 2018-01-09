@@ -1,3 +1,5 @@
+from setuptools import setup
+
 setup(
     name = "azlyrics to pdf",
     version = "0.0.1",
