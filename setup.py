@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name = "azlyrics to pdf",
+    name = "azlyrics",
     version = "0.0.1",
     description = "Script that generates a PDF file of a song's lyric",
     url = "https://github.com/JohnBidwellB/azlyrics-to-pdf",
@@ -9,4 +9,5 @@ setup(
     author_email = "johnbidwellb@gmail.com",
     packages = ['azlyrics'],
     install_requires = ['BeautifulSoup4', 'pdfkit'],
+    scripts = ['bin/azlyrics']
 )

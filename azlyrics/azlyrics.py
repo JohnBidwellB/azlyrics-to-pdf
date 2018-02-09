@@ -4,6 +4,7 @@ import argparse
 import re
 from bs4 import BeautifulSoup
 import pdfkit
+import os
 
 class AZLyrics:
     def __init__(self, artist, song):
@@ -38,8 +39,8 @@ def savePDF(path, lyric, artist, song):
     #pdfkit.from_string(lyric, "{} - {}.pdf".format(artist, song))
     pdfkit.from_file("{} - {}.txt".format(artist, song), "{} - {}.pdf".format(artist, song))
 
-if __name__=="__main__":
-
+def run():
+#if __name__=="__main__":
     parser = argparse.ArgumentParser(
         prog = "AZLyrics",
         description="Search a song's lyric from AZLyrics",
@@ -47,7 +48,7 @@ if __name__=="__main__":
     )
     parser.add_argument("artist", metavar = "A", type = str, help= "Name of the artist")
     parser.add_argument("song", metavar = "S", type = str, help = "Name of the song")
-    parser.add_argument("-s", "--save", metavar = "path", dest = "path", default = False, help = "Save song's lyric as PDF file")
+    parser.add_argument("-s", "--save", dest = "path", default = False, help = "Save song's lyric as PDF file")
     args = parser.parse_args()
 
     search = AZLyrics(args.artist, args.song)
@@ -61,3 +62,4 @@ if __name__=="__main__":
         savePDF(args.path, lyric, args.artist, args.song)
     else:
         print(lyric)
+        #os.system("say %s"%(lyric))
