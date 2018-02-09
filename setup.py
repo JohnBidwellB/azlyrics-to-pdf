@@ -11,8 +11,8 @@ setup(
     install_requires = ['BeautifulSoup4', 'pdfkit'],
     scripts = ['bin/azlyrics'],
     entry_points = {
-          'console_scripts': [
-              'azlyrics = azlyrics:run'
-          ]
-}
+        'console_scripts': [
+            'azlyrics = azlyrics:run'
+        ]
+    }
 )
