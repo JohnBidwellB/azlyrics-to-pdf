@@ -61,9 +61,7 @@ def run():
     parser.add_argument("-s", "--save", dest = "path", action = "store_true", help = "Save song's lyric as PDF file")
 
     args = parser.parse_args()
-
     search = AZLyrics(args.artist, args.song)
-    #lyric = search.extractLyrics()
 
     if args.path:
         search.getPDF()
