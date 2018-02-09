@@ -34,21 +34,13 @@ class AZLyrics:
         lyric = lyric_with_tags.text.strip()
         return lyric
 
-    def getPDF(self, lyric):
-        homedir = os.path.expanduser('~')
-        savedir = homedir+"/documents/azlyrics"
-
-        txt = open(savedir+"/{} - {}.txt".format(self.artist, self.song), "w")
-        txt.write("{} - {}\n\n".format(self.artist, self.song).title())
-        txt.write(lyric)
-        txt.close()
-
-        if os.path.exists(savedir) == False:
-            os.mkdir(savedir)
-        pdfkit.from_file(savedir+"/{} - {}.txt".format(self.artist, self.song), savedir+"/{} - {}.pdf".format(self.artist, self.song))
-        os.remove(savedir+"/{} - {}.txt".format(self.artist, self.song))
+def savePDF(path, lyric, artist, song):
+    pdfkit.from_string("{} - {}".format(artist, song), "{} - {}.pdf".format(artist, song))
+    #pdfkit.from_string(lyric, "{} - {}.pdf".format(artist, song))
+    pdfkit.from_file("{} - {}.txt".format(artist, song), "{} - {}.pdf".format(artist, song))
 
 def run():
+#if __name__=="__main__":
     parser = argparse.ArgumentParser(
         prog = "AZLyrics",
         description="Search a song's lyric from AZLyrics",
@@ -56,15 +48,18 @@ def run():
     )
     parser.add_argument("artist", metavar = "A", type = str, help= "Name of the artist")
     parser.add_argument("song", metavar = "S", type = str, help = "Name of the song")
-    parser.add_argument("-s", "--save", dest = "path", action = "store_true", help = "Save song's lyric as PDF file")
-
+    parser.add_argument("-s", "--save", dest = "path", default = False, help = "Save song's lyric as PDF file")
     args = parser.parse_args()
 
     search = AZLyrics(args.artist, args.song)
     lyric = search.extractLyrics()
 
     if args.path:
-        search.getPDF(lyric)
+        txt = open("{} - {}.txt".format(args.artist, args.song), "w")
+        txt.write("{} - {}\n\n".format(args.artist, args.song).title())
+        txt.write(lyric)
+        txt.close()
+        savePDF(args.path, lyric, args.artist, args.song)
     else:
         print(lyric)
         #os.system("say %s"%(lyric))
