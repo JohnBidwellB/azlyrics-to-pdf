@@ -5,11 +5,13 @@ import re
 from bs4 import BeautifulSoup
 import pdfkit
 import os
+from sys import exit
 
 class AZLyrics:
     def __init__(self, artist, song):
         self.artist = artist
         self.song = song
+        self.lyric = self.getLyrics()
 
     def formatArtistAndSong(self):
         patron = re.compile(" ")
@@ -27,20 +29,20 @@ class AZLyrics:
             return response.read()
         except urllib.error.HTTPError:
             print("Song not found")
+            exit()
 
-    def extractLyrics(self):
+    def getLyrics(self):
         soup = BeautifulSoup(self.getPage(), 'html.parser')
         lyric_with_tags = soup.find("div", attrs={"class": None, "id": None})
-        lyric = lyric_with_tags.text.strip()
-        return lyric
+        return lyric_with_tags.text.strip()
 
-    def getPDF(self, lyric):
+    def getPDF(self):
         homedir = os.path.expanduser('~')
         savedir = homedir+"/documents/azlyrics"
 
         txt = open(savedir+"/{} - {}.txt".format(self.artist, self.song), "w")
         txt.write("{} - {}\n\n".format(self.artist, self.song).title())
-        txt.write(lyric)
+        txt.write(self.lyric)
         txt.close()
 
         if os.path.exists(savedir) == False:
@@ -61,10 +63,10 @@ def run():
     args = parser.parse_args()
 
     search = AZLyrics(args.artist, args.song)
-    lyric = search.extractLyrics()
+    #lyric = search.extractLyrics()
 
     if args.path:
-        search.getPDF(lyric)
+        search.getPDF()
     else:
-        print(lyric)
+        print(search.lyric)
         #os.system("say %s"%(lyric))
